@@ -65,11 +65,13 @@ server <- function(input, output) {
      colors[0:12] = "red"
      colors[13:22] = "green"
      colors[23:32] = "lightblue"
-    
+    maxv=tapply(y,water$status,sum)
+    sdv=tapply(y,water$status,sd)
+    index=tapply(water$total.loss,water$status)
      #make ggplot2 object
      ggplot(water,aes(factor(status),y))+
        geom_bar(stat="identity", fill= colors)+
-       geom_errorbar(aes(ymin=max(y)-sd(y), ymax=max(y)+sd(y))) +
+       geom_errorbar(aes(ymin=maxv[index]-sd(y), ymax=maxv[index]+sd(y))) +
        ylab(ylabs)+
        xlab("Reproductive Status")
      
@@ -78,4 +80,3 @@ server <- function(input, output) {
 
 # Run the application 
 shinyApp(ui = ui, server = server)
-
